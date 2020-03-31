@@ -17,8 +17,16 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginViaWebsiteButton: UIButton!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setTextFieldToInitialState(emailTextField, placeholder: "Email")
+        setTextFieldToInitialState(passwordTextField, placeholder: "Password")
+    }
+    
+    private func setTextFieldToInitialState(_ textField: UITextField, placeholder: String) {
+        textField.text = ""
+        textField.placeholder = placeholder
     }
     
     @IBAction func loginTapped(_ sender: UIButton) {

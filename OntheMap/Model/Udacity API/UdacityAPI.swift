@@ -9,15 +9,15 @@
 import Foundation
 
 class UdacityAPI {
-    static let shared = UdacityAPI()
     
     struct Auth {
-        static var objectId = ""
+        static var key = ""
+        static var objectId = "bq1ak5h0s05mpe5sekb0"
         static var sessionId = ""
         static var expiresAt = ""
     }
     
-    enum Endpoints {
+    private enum Endpoints {
         static let base = "https://onthemap-api.udacity.com/v1"
         
         case session
@@ -76,10 +76,10 @@ class UdacityAPI {
         task.resume()
     }
     
-    class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, body: RequestType, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
+    fileprivate class func taskForPUTAndPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, body: RequestType, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = ResponseType.self == UpdateResponse.self ? "PUT" : "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -118,8 +118,9 @@ class UdacityAPI {
     class func login(_ user: User, completion: @escaping(Bool, Error?) -> Void) {
         let body = LoginRequest(udacity: user)
         
-        taskForPOSTRequest(url: Endpoints.session.url, body: body, responseType: UdacitySessionResponse.self) { (response, error) in
+        taskForPUTAndPOSTRequest(url: Endpoints.session.url, body: body, responseType: UdacitySessionResponse.self) { (response, error) in
             if let response = response {
+                Auth.key = response.account.key
                 Auth.sessionId = response.session.id
                 Auth.expiresAt = response.session.expiration
                 completion(true, nil)
@@ -129,8 +130,8 @@ class UdacityAPI {
         }
     }
     
-    class func create(studentLocation: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
-        taskForPOSTRequest(url: Endpoints.studentLocation.url, body: studentLocation, responseType: CreateResponse.self) { (response, error) in
+    class func create(studentRequest: CreateLocationRequest, completion: @escaping (Bool, Error?) -> Void) {
+        taskForPUTAndPOSTRequest(url: Endpoints.studentLocation.url, body: studentRequest, responseType: CreateResponse.self) { (response, error) in
             if let response = response {
                 Auth.objectId = response.objectId
                 completion(true, nil)
@@ -140,8 +141,8 @@ class UdacityAPI {
         }
     }
     
-    class func update(objectId: String, studentLocation: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
-        taskForPOSTRequest(url: Endpoints.putStudentLocation(objectId).url, body: studentLocation, responseType: UpdateResponse.self) { (response, error) in
+    class func update(objectId: String, studentRequest: CreateLocationRequest, completion: @escaping (Bool, Error?) -> Void) {
+        taskForPUTAndPOSTRequest(url: Endpoints.putStudentLocation(objectId).url, body: studentRequest, responseType: UpdateResponse.self) { (response, error) in
             if let response = response {
                 print(response.updatedAt)
                 completion(true, nil)
@@ -151,7 +152,7 @@ class UdacityAPI {
         }
     }
     
-    class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
+    fileprivate class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data else {

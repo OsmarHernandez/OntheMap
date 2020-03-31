@@ -26,11 +26,23 @@ class InformationPostingViewController: UIViewController {
     }
     
     @IBAction func findLocationTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: showLocationIdentifier, sender: nil)
+        guard let location = locationTextField.text, !location.isEmpty else { return }
+        
+        guard let link = linkTextField.text, !link.isEmpty else { return }
+        
+        let info = (location, link)
+        
+        performSegue(withIdentifier: showLocationIdentifier, sender: info)
     }
     
     @IBAction func viewTapped(_ sender: UITapGestureRecognizer) {
         dismissKeyboard(for: locationTextField, and: linkTextField)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let locationViewController = segue.destination as? LocationViewController {
+            locationViewController.studentInfo = sender as! (String, String)
+        }
     }
 }
 

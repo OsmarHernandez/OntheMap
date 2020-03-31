@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let showInformationIdentifier = "showInformation"
+
 extension UIViewController {
     
     var updateLocationsDataNotification: Notification.Name {
@@ -37,6 +39,16 @@ extension UIViewController {
         }
     }
     
+    func showAlertController(title: String?, message: String?, alertActions: [UIAlertAction]) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        for alertAction in alertActions {
+            alertController.addAction(alertAction)
+        }
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     @IBAction func logoutTapped(_ sender: UIBarButtonItem) {
         UdacityAPI.logout { (success, error) in
             if success {
@@ -54,6 +66,22 @@ extension UIViewController {
             LocationsSingleton.shared.locations = locations
             
             NotificationCenter.default.post(name: self.updateLocationsDataNotification, object: nil)
+        }
+    }
+    
+    @IBAction func addPinTapped(_ sender: UIBarButtonItem) {
+        if UdacityAPI.Auth.objectId != "" {
+            let message = "You have already posted a Student Location. Would you like to Overwrite your Current Location?"
+            
+            let overWriteAlertAction = UIAlertAction(title: "Overwrite", style: .destructive) { (action) in
+                self.performSegue(withIdentifier: showInformationIdentifier, sender: nil)
+            }
+            
+            let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            showAlertController(title: nil, message: message, alertActions: [overWriteAlertAction, cancelAlertAction])
+        } else {
+            performSegue(withIdentifier: showInformationIdentifier, sender: nil)
         }
     }
 }
