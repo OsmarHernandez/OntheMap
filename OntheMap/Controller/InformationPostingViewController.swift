@@ -26,9 +26,15 @@ class InformationPostingViewController: UIViewController {
     }
     
     @IBAction func findLocationTapped(_ sender: UIButton) {
-        guard let location = locationTextField.text, !location.isEmpty else { return }
+        guard let location = locationTextField.text, !location.isEmpty else {
+            showAlertController(title: "Something is missing", message: "Plaease enter a valid location", alertActions: [alertActionForMissingData])
+            return
+        }
         
-        guard let link = linkTextField.text, !link.isEmpty else { return }
+        guard let link = linkTextField.text, !link.isEmpty else {
+            showAlertController(title: "Something is missing", message: "Plaease enter a web link", alertActions: [alertActionForMissingData])
+            return
+        }
         
         let info = (location, link)
         
@@ -38,6 +44,10 @@ class InformationPostingViewController: UIViewController {
     @IBAction func viewTapped(_ sender: UITapGestureRecognizer) {
         dismissKeyboard(for: locationTextField, and: linkTextField)
     }
+    
+    private let alertActionForMissingData: UIAlertAction = {
+        return UIAlertAction(title: "Got it.", style: .default, handler: nil)
+    }()
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let locationViewController = segue.destination as? LocationViewController {

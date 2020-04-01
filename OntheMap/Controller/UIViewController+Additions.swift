@@ -59,7 +59,7 @@ extension UIViewController {
         }
     }
     
-    @IBAction func refreshTapped(_ sender: UIBarButtonItem) {
+    func updateStudentLocationsData() {
         UdacityAPI.getUpdate { (locations, error) in
             guard !locations.isEmpty else { return }
             
@@ -67,6 +67,10 @@ extension UIViewController {
             
             NotificationCenter.default.post(name: self.updateLocationsDataNotification, object: nil)
         }
+    }
+    
+    @IBAction func refreshTapped(_ sender: UIBarButtonItem) {
+        updateStudentLocationsData()
     }
     
     @IBAction func addPinTapped(_ sender: UIBarButtonItem) {

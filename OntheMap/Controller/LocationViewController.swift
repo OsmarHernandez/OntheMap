@@ -66,13 +66,14 @@ class LocationViewController: UIViewController {
         annotation.subtitle = locationRequest.mediaURL
         
         mapView.addAnnotation(annotation)
+        mapView.region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 2_00_000.0, longitudinalMeters: 2_00_000.0)
     }
 
     @IBAction func finishTapped(_ sender: UIButton) {
         if UdacityAPI.Auth.objectId == "" {
-            UdacityAPI.create(locationRequest: locationRequest, completion: handleLocationRequest(_:error:))
+            UdacityAPI.createStudentLocation(locationRequest: locationRequest, completion: handleLocationRequest(_:error:))
         } else {
-            UdacityAPI.update(objectId: UdacityAPI.Auth.objectId, locationRequest: locationRequest, completion: handleLocationRequest(_:error:))
+            UdacityAPI.updateStudentLocation(objectId: UdacityAPI.Auth.objectId, locationRequest: locationRequest, completion: handleLocationRequest(_:error:))
         }
     }
     
@@ -88,6 +89,10 @@ class LocationViewController: UIViewController {
             showAlertController(title: "\(title) Location", message: "Something went wrong. \(error)", alertActions: [alertAction])
         } else {
             showAlertController(title: "\(title) Location", message: "Your location has been successfully \(message)", alertActions: [alertAction])
+        }
+        
+        if success {
+            updateStudentLocationsData()
         }
     }
 }

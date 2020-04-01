@@ -130,7 +130,7 @@ class UdacityAPI {
         }
     }
     
-    class func create(locationRequest: CreateLocationRequest, completion: @escaping (Bool, Error?) -> Void) {
+    class func createStudentLocation(locationRequest: CreateLocationRequest, completion: @escaping (Bool, Error?) -> Void) {
         taskForPUTAndPOSTRequest(url: Endpoints.studentLocation.url, body: locationRequest, responseType: CreateResponse.self) { (response, error) in
             if let response = response {
                 Auth.objectId = response.objectId
@@ -141,7 +141,7 @@ class UdacityAPI {
         }
     }
     
-    class func update(objectId: String, locationRequest: CreateLocationRequest, completion: @escaping (Bool, Error?) -> Void) {
+    class func updateStudentLocation(objectId: String, locationRequest: CreateLocationRequest, completion: @escaping (Bool, Error?) -> Void) {
         taskForPUTAndPOSTRequest(url: Endpoints.putStudentLocation(objectId).url, body: locationRequest, responseType: UpdateResponse.self) { (response, error) in
             if let response = response {
                 print(response.updatedAt)
@@ -202,6 +202,7 @@ class UdacityAPI {
     class func getUpdate(completion: @escaping ([StudentLocation], Error?) -> Void) {
         taskForGETRequest(url: Endpoints.update.url, responseType: Locations.self) { (response, error) in
             if let response = response {
+                print("Update Locations Request ended")
                 completion(response.results, nil)
             } else {
                 completion([], error)
