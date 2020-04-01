@@ -69,6 +69,8 @@ class LoginViewController: UIViewController {
         UIView.animate(withDuration: 0.5) {
             self.emailTextField.isHidden = loggingIn
             self.passwordTextField.isHidden = loggingIn
+            
+            self.loginButton.isEnabled = !loggingIn
             self.loginViaWebsiteButton.isEnabled = !loggingIn
             
             if loggingIn {
