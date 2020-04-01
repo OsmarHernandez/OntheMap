@@ -70,29 +70,24 @@ class LocationViewController: UIViewController {
 
     @IBAction func finishTapped(_ sender: UIButton) {
         if UdacityAPI.Auth.objectId == "" {
-            print("create")
-            UdacityAPI.create(studentRequest: locationRequest!, completion: handleCreateLocationRequest(success:error:))
+            UdacityAPI.create(locationRequest: locationRequest, completion: handleLocationRequest(_:error:))
         } else {
-            print("update")
-            UdacityAPI.update(objectId: UdacityAPI.Auth.objectId, studentRequest: locationRequest!, completion: handleUpdateRequest(success:error:))
+            UdacityAPI.update(objectId: UdacityAPI.Auth.objectId, locationRequest: locationRequest, completion: handleLocationRequest(_:error:))
+        }
+    }
+    
+    private func handleLocationRequest(_ success: Bool, error: Error?) {
+        let message = UdacityAPI.Auth.objectId == "" ? "sent!" : "updated!"
+        let title = UdacityAPI.Auth.objectId == "" ? "Sumbitting" : "Updating"
+        
+        let alertAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+            self.navigationController?.dismiss(animated: true, completion: nil)
         }
         
-        navigationController?.dismiss(animated: true, completion: nil)
-    }
-    
-    private func handleCreateLocationRequest(success: Bool, error: Error?) {
-        if success {
-            print("Successfully created!")
+        if let error = error {
+            showAlertController(title: "\(title) Location", message: "Something went wrong. \(error)", alertActions: [alertAction])
         } else {
-            print(error!)
-        }
-    }
-    
-    private func handleUpdateRequest(success: Bool, error: Error?) {
-        if success {
-            print("Successfully updated!")
-        } else {
-            print(error!)
+            showAlertController(title: "\(title) Location", message: "Your location has been successfully \(message)", alertActions: [alertAction])
         }
     }
 }
