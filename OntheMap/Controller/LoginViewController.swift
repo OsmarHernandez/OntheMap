@@ -16,6 +16,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginViaWebsiteButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -35,7 +36,14 @@ class LoginViewController: UIViewController {
         
         let user = User(username: username, password: password)
         
+        setLoggingIn(true)
         UdacityAPI.login(user, completion: handeLoginResponse(_:error:))
+    }
+    
+    @IBAction func loginViaWebsiteTapped(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.5) {
+            self.setLoggingIn(true)
+        }
     }
     
     @IBAction func viewTapped(_ sender: UITapGestureRecognizer) {
@@ -43,10 +51,12 @@ class LoginViewController: UIViewController {
     }
     
     private func handeLoginResponse(_ success: Bool, error: Error?) {
+        setLoggingIn(false)
+        
         if success {
             UdacityAPI.getStudentLocations(completion: handleStudentLocationsResponse(_:error:))
         } else {
-            print(error!)
+            showAlertController(title: "Wrong Credentials", message: "Either the username or password is incorrect.", alertActions: [alertActionForWrongCredentials])
         }
     }
     
@@ -56,6 +66,22 @@ class LoginViewController: UIViewController {
         LocationsSingleton.shared.locations = locations
         performSegue(withIdentifier: showMapIdentifier, sender: nil)
     }
+    
+    private func setLoggingIn(_ loggingIn: Bool) {
+        emailTextField.isHidden = loggingIn
+        passwordTextField.isHidden = loggingIn
+        loginViaWebsiteButton.isEnabled = !loggingIn
+        
+        if loggingIn {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+    
+    private let alertActionForWrongCredentials: UIAlertAction = {
+        return UIAlertAction(title: "Try again", style: .default, handler: nil)
+    }()
 }
 
 extension LoginViewController: UITextFieldDelegate {
