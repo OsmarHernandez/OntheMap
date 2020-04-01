@@ -12,12 +12,12 @@ class UdacityAPI {
     
     struct Auth {
         static var key = ""
-        static var objectId = "bq1ak5h0s05mpe5sekb0"
+        static var objectId = ""
         static var sessionId = ""
         static var expiresAt = ""
     }
     
-    private enum Endpoints {
+    enum Endpoints {
         static let base = "https://onthemap-api.udacity.com/v1"
         
         case session
@@ -25,6 +25,7 @@ class UdacityAPI {
         case getUserData(String)
         case putStudentLocation(String)
         case update
+        case signup
         
         var stringValue: String {
             switch self {
@@ -38,6 +39,8 @@ class UdacityAPI {
                 return Endpoints.base + "/StudentLocation/\(objectId)"
             case .update:
                 return Endpoints.base + "/StudentLocation?order=-updatedAt"
+            case .signup:
+                return "https://auth.udacity.com/sign-up"
             }
         }
         

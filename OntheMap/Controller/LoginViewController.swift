@@ -41,9 +41,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginViaWebsiteTapped(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.5) {
-            self.setLoggingIn(true)
-        }
+        UIApplication.shared.open(UdacityAPI.Endpoints.signup.url, options: [:], completionHandler: nil)
     }
     
     @IBAction func viewTapped(_ sender: UITapGestureRecognizer) {
@@ -68,14 +66,16 @@ class LoginViewController: UIViewController {
     }
     
     private func setLoggingIn(_ loggingIn: Bool) {
-        emailTextField.isHidden = loggingIn
-        passwordTextField.isHidden = loggingIn
-        loginViaWebsiteButton.isEnabled = !loggingIn
-        
-        if loggingIn {
-            activityIndicator.startAnimating()
-        } else {
-            activityIndicator.stopAnimating()
+        UIView.animate(withDuration: 0.5) {
+            self.emailTextField.isHidden = loggingIn
+            self.passwordTextField.isHidden = loggingIn
+            self.loginViaWebsiteButton.isEnabled = !loggingIn
+            
+            if loggingIn {
+                self.activityIndicator.startAnimating()
+            } else {
+                self.activityIndicator.stopAnimating()
+            }
         }
     }
     
