@@ -42,7 +42,7 @@ class MapViewController: UIViewController {
     private func setupAnnotations() -> [MKPointAnnotation] {
         var annotations = [MKPointAnnotation]()
         
-        for location in LocationsSingleton.shared.locations {
+        for location in Locations.shared.results {
             let lat = CLLocationDegrees(location.latitude)
             let long = CLLocationDegrees(location.longitude)
             

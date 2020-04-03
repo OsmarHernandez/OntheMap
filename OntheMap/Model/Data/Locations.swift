@@ -9,5 +9,7 @@
 import Foundation
 
 struct Locations: Codable {
-    let results: [StudentLocation]
+    static var shared = Locations()
+    
+    var results = [StudentLocation]()
 }

@@ -39,7 +39,7 @@ extension ListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let location = LocationsSingleton.shared.locations[indexPath.row]
+        let location = Locations.shared.results[indexPath.row]
         let toOpen = location.mediaURL
         let app = UIApplication.shared
         
@@ -52,12 +52,12 @@ extension ListViewController: UITableViewDelegate {
 extension ListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return LocationsSingleton.shared.locations.count
+        return Locations.shared.results.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let listCell = tableView.dequeueReusableCell(withIdentifier: listCellIdentifier) as! ListTableViewCell
-        let location = LocationsSingleton.shared.locations[indexPath.row]
+        let location = Locations.shared.results[indexPath.row]
         
         listCell.nameLabel.text = location.firstName + " " + location.lastName
         listCell.webLinkLabel.text = location.mediaURL

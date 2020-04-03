@@ -61,7 +61,7 @@ class LoginViewController: UIViewController {
     private func handleStudentLocationsResponse(_ locations: [StudentLocation], error: Error?) {
         guard error == nil else { return }
         
-        LocationsSingleton.shared.locations = locations
+        Locations.shared.results = locations
         performSegue(withIdentifier: showMapIdentifier, sender: nil)
     }
     

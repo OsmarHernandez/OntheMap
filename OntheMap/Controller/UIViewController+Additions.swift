@@ -63,7 +63,7 @@ extension UIViewController {
         UdacityAPI.getUpdate { (locations, error) in
             guard !locations.isEmpty else { return }
             
-            LocationsSingleton.shared.locations = locations
+            Locations.shared.results = locations
             
             NotificationCenter.default.post(name: self.updateLocationsDataNotification, object: nil)
         }

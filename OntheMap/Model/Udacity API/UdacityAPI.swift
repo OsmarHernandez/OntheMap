@@ -38,7 +38,7 @@ class UdacityAPI {
             case .putStudentLocation(let objectId):
                 return Endpoints.base + "/StudentLocation/\(objectId)"
             case .update:
-                return Endpoints.base + "/StudentLocation?order=-updatedAt"
+                return Endpoints.base + "/StudentLocation?order=-updatedAt?limit=100"
             case .signup:
                 return "https://auth.udacity.com/sign-up"
             }

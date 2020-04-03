@@ -29,7 +29,6 @@
 		20C527D5242D3D9D00A4E275 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C527D4242D3D9D00A4E275 /* ListTableViewCell.swift */; };
 		20C527D8242D578F00A4E275 /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C527D7242D578F00A4E275 /* Locations.swift */; };
 		20D432C3242FE2F5001D1596 /* UdacityResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D432C2242FE2F5001D1596 /* UdacityResponse.swift */; };
-		20D432C5242FF00C001D1596 /* LocationsSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D432C4242FF00C001D1596 /* LocationsSingleton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,7 +56,6 @@
 		20C527D4242D3D9D00A4E275 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		20C527D7242D578F00A4E275 /* Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locations.swift; sourceTree = "<group>"; };
 		20D432C2242FE2F5001D1596 /* UdacityResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UdacityResponse.swift; sourceTree = "<group>"; };
-		20D432C4242FF00C001D1596 /* LocationsSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsSingleton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,7 +175,6 @@
 			isa = PBXGroup;
 			children = (
 				20C527D7242D578F00A4E275 /* Locations.swift */,
-				20D432C4242FF00C001D1596 /* LocationsSingleton.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -260,7 +257,6 @@
 				20B0CC4C242C9FB400BD6ED3 /* CustomTextField.swift in Sources */,
 				20C527CB242D303800A4E275 /* UIViewController+Additions.swift in Sources */,
 				20B0CC4E242C9FF800BD6ED3 /* Colors.swift in Sources */,
-				20D432C5242FF00C001D1596 /* LocationsSingleton.swift in Sources */,
 				2039F39C242ED05300EC069D /* UdacitySessionResponse.swift in Sources */,
 				20B0CC32242C8AFE00BD6ED3 /* LoginViewController.swift in Sources */,
 				2058B3252432A05C0030F31E /* CreateLocationRequest.swift in Sources */,
