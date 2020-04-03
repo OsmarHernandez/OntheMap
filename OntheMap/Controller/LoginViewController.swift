@@ -36,7 +36,7 @@ class LoginViewController: UIViewController {
         
         let user = User(username: username, password: password)
         
-        setLoggingIn(true)
+        setupAnimationView(activityIndicator, isAnimating: true, textfields: [emailTextField, passwordTextField], buttons: [loginButton, loginViaWebsiteButton])
         UdacityAPI.login(user, completion: handeLoginResponse(_:error:))
     }
     
@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
     }
     
     private func handeLoginResponse(_ success: Bool, error: Error?) {
-        setLoggingIn(false)
+        setupAnimationView(activityIndicator, isAnimating: false, textfields: [emailTextField, passwordTextField], buttons: [loginButton, loginViaWebsiteButton])
         
         if success {
             UdacityAPI.getStudentLocations(completion: handleStudentLocationsResponse(_:error:))
@@ -68,22 +68,6 @@ class LoginViewController: UIViewController {
         
         Locations.shared.results = locations
         performSegue(withIdentifier: showMapIdentifier, sender: nil)
-    }
-    
-    private func setLoggingIn(_ loggingIn: Bool) {
-        UIView.animate(withDuration: 0.5) {
-            self.emailTextField.isHidden = loggingIn
-            self.passwordTextField.isHidden = loggingIn
-            
-            self.loginButton.isEnabled = !loggingIn
-            self.loginViaWebsiteButton.isEnabled = !loggingIn
-            
-            if loggingIn {
-                self.activityIndicator.startAnimating()
-            } else {
-                self.activityIndicator.stopAnimating()
-            }
-        }
     }
 }
 

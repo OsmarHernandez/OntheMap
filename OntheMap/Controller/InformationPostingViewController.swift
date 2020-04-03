@@ -14,6 +14,8 @@ class InformationPostingViewController: UIViewController {
     
     @IBOutlet weak var locationTextField: CustomTextField!
     @IBOutlet weak var linkTextField: CustomTextField!
+    @IBOutlet weak var findLocationButton: CustomButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,12 +23,18 @@ class InformationPostingViewController: UIViewController {
         changeLeftBarButtonFont()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setupAnimationView(activityIndicator, isAnimating: false, textfields: [locationTextField, linkTextField], buttons: [findLocationButton])
+    }
+    
     @IBAction func cancelTapped(_ sender: UIBarButtonItem) {
         navigationController?.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func findLocationTapped(_ sender: UIButton) {
-        let alertActionForMissingData = defaultAlertAction("Got it.")
+        let alertActionForMissingData = defaultAlertAction("Got it")
         
         guard let location = locationTextField.text, !location.isEmpty else {
             showAlertController(title: "Something is missing", message: "Plaease enter a valid location", alertActions: [alertActionForMissingData])
@@ -37,6 +45,8 @@ class InformationPostingViewController: UIViewController {
             showAlertController(title: "Something is missing", message: "Plaease enter a web link", alertActions: [alertActionForMissingData])
             return
         }
+        
+        setupAnimationView(activityIndicator, isAnimating: true, textfields: [locationTextField, linkTextField], buttons: [findLocationButton])
         
         let info = (location, link)
         

@@ -39,8 +39,26 @@ extension UIViewController {
         }
     }
     
-    func defaultAlertAction(_ title: String) -> UIAlertAction {
+    func defaultAlertAction(_ title: String, handler: ((UIAlertAction) -> Void)? = nil) -> UIAlertAction {
         return UIAlertAction(title: title, style: .default, handler: nil)
+    }
+    
+    func setupAnimationView(_ activityIndicator: UIActivityIndicatorView, isAnimating: Bool, textfields: [UITextField], buttons: [UIButton]) {
+        UIView.animate(withDuration: 0.5) {
+            for textfield in textfields {
+                textfield.isHidden = isAnimating
+            }
+            
+            for button in buttons {
+                button.isEnabled = !isAnimating
+            }
+            
+            if isAnimating {
+                activityIndicator.startAnimating()
+            } else {
+                activityIndicator.stopAnimating()
+            }
+        }
     }
     
     func showAlertController(title: String?, message: String?, alertActions: [UIAlertAction]) {
