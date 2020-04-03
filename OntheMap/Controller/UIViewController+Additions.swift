@@ -39,6 +39,10 @@ extension UIViewController {
         }
     }
     
+    func defaultAlertAction(_ title: String) -> UIAlertAction {
+        return UIAlertAction(title: title, style: .default, handler: nil)
+    }
+    
     func showAlertController(title: String?, message: String?, alertActions: [UIAlertAction]) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -55,13 +59,22 @@ extension UIViewController {
                 DispatchQueue.main.async {
                     self.dismiss(animated: true, completion: nil)
                 }
+            } else {
+                let alertActionForLogoutFailure = self.defaultAlertAction("Ok")
+                DispatchQueue.main.async {
+                    self.showAlertController(title: "Logout Failed", message: error?.localizedDescription, alertActions: [alertActionForLogoutFailure])
+                }
             }
         }
     }
     
     func updateStudentLocationsData() {
         UdacityAPI.getUpdate { (locations, error) in
-            guard !locations.isEmpty else { return }
+            guard !locations.isEmpty else {
+                let alertActionForUpdateData = self.defaultAlertAction("Ok")
+                self.showAlertController(title: "Locations Update Failed", message: error?.localizedDescription, alertActions: [alertActionForUpdateData])
+                return
+            }
             
             Locations.shared.results = locations
             

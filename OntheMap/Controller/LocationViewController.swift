@@ -18,8 +18,8 @@ class LocationViewController: UIViewController {
     var locationRequest: CreateLocationRequest!
     var studentInfo: (location: String, link: String)!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         searchForLocation(studentInfo.location, completion: handleSearchLocation(_:error:))
     }
@@ -56,7 +56,10 @@ class LocationViewController: UIViewController {
     }
     
     private func handleSearchLocation(_ coordinate: CLLocationCoordinate2D?, error: Error?) {
-        guard let coordinate = coordinate else { return }
+        guard let coordinate = coordinate else {
+            showAlertController(title: "Failed to search location", message: error?.localizedDescription, alertActions: [alertAction])
+            return
+        }
         
         locationRequest = newStudentLocationRequest(lat: coordinate.latitude, long: coordinate.longitude)
         
@@ -81,12 +84,8 @@ class LocationViewController: UIViewController {
         let message = UdacityAPI.Auth.objectId == "" ? "sent!" : "updated!"
         let title = UdacityAPI.Auth.objectId == "" ? "Sumbitting" : "Updating"
         
-        let alertAction = UIAlertAction(title: "Ok", style: .default) { (action) in
-            self.navigationController?.dismiss(animated: true, completion: nil)
-        }
-        
         if let error = error {
-            showAlertController(title: "\(title) Location", message: "Something went wrong. \(error)", alertActions: [alertAction])
+            showAlertController(title: "\(title) Failed", message: "Something went wrong. \(error.localizedDescription)", alertActions: [alertAction])
         } else {
             showAlertController(title: "\(title) Location", message: "Your location has been successfully \(message)", alertActions: [alertAction])
         }
@@ -95,6 +94,13 @@ class LocationViewController: UIViewController {
             updateStudentLocationsData()
         }
     }
+    
+    private lazy var alertAction: UIAlertAction = {
+        let ac = UIAlertAction(title: "Ok", style: .default) { (action) in
+            self.navigationController?.dismiss(animated: true, completion: nil)
+        }
+        return ac
+    }()
 }
 
 extension LocationViewController: MKMapViewDelegate {

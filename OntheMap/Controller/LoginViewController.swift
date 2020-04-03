@@ -54,12 +54,17 @@ class LoginViewController: UIViewController {
         if success {
             UdacityAPI.getStudentLocations(completion: handleStudentLocationsResponse(_:error:))
         } else {
-            showAlertController(title: "Wrong Credentials", message: "Either the username or password is incorrect.", alertActions: [alertActionForWrongCredentials])
+            let alertActionForWrongCredentials = defaultAlertAction("Try again")
+            showAlertController(title: "Failed login attempt", message: error?.localizedDescription, alertActions: [alertActionForWrongCredentials])
         }
     }
     
     private func handleStudentLocationsResponse(_ locations: [StudentLocation], error: Error?) {
-        guard error == nil else { return }
+        guard error == nil else {
+            let alertActionForLocationsRequestFailure = defaultAlertAction("Ok")
+            showAlertController(title: "Failed to fetch data", message: error?.localizedDescription, alertActions: [alertActionForLocationsRequestFailure])
+            return
+        }
         
         Locations.shared.results = locations
         performSegue(withIdentifier: showMapIdentifier, sender: nil)
@@ -80,10 +85,6 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    
-    private let alertActionForWrongCredentials: UIAlertAction = {
-        return UIAlertAction(title: "Try again", style: .default, handler: nil)
-    }()
 }
 
 extension LoginViewController: UITextFieldDelegate {

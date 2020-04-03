@@ -26,6 +26,8 @@ class InformationPostingViewController: UIViewController {
     }
     
     @IBAction func findLocationTapped(_ sender: UIButton) {
+        let alertActionForMissingData = defaultAlertAction("Got it.")
+        
         guard let location = locationTextField.text, !location.isEmpty else {
             showAlertController(title: "Something is missing", message: "Plaease enter a valid location", alertActions: [alertActionForMissingData])
             return
@@ -44,10 +46,6 @@ class InformationPostingViewController: UIViewController {
     @IBAction func viewTapped(_ sender: UITapGestureRecognizer) {
         dismissKeyboard(for: locationTextField, and: linkTextField)
     }
-    
-    private let alertActionForMissingData: UIAlertAction = {
-        return UIAlertAction(title: "Got it.", style: .default, handler: nil)
-    }()
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let locationViewController = segue.destination as? LocationViewController {

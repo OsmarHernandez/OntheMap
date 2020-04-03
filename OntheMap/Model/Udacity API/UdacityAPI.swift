@@ -108,7 +108,7 @@ class UdacityAPI {
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
                 }
-            } catch let error {
+            } catch {
                 DispatchQueue.main.async {
                     completion(nil, error)
                 }
@@ -205,7 +205,6 @@ class UdacityAPI {
     class func getUpdate(completion: @escaping ([StudentLocation], Error?) -> Void) {
         taskForGETRequest(url: Endpoints.update.url, responseType: Locations.self) { (response, error) in
             if let response = response {
-                print("Update Locations Request ended")
                 completion(response.results, nil)
             } else {
                 completion([], error)
